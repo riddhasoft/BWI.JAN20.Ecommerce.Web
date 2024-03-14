@@ -15,7 +15,7 @@ namespace BWI.JAN20.Ecommerce.Service
         int DeleteItem(int Id);
         int AddItem(ItemModel item);
 
-        bool PublishItem(int itemId);
-        bool ShowInHomePage(int itemId);
+        bool PublishItem(int itemId,bool hideShow);
+        bool ShowInHomePage(int itemId,bool hideShow);
     }
 }
