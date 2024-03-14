@@ -9,6 +9,7 @@ namespace BWI.JAN20.Ecommerce.Service
 {
     public interface IItemService
     {
+        //added comment
         List<ItemModel> GetItems();
         ItemModel GetItem(int id);
         int UpdateItem(ItemModel item);
