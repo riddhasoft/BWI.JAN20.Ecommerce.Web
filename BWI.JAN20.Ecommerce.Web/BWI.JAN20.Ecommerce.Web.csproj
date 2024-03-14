@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BWI.JAN20.Ecommerce.Model\BWI.JAN20.Ecommerce.Model.csproj" />
+  </ItemGroup>
+
 </Project>
