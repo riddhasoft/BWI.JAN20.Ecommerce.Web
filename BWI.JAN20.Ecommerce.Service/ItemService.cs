@@ -12,6 +12,7 @@ namespace BWI.JAN20.Ecommerce.Service
 {
     internal class ItemService : IItemService
     {
+        //todo: add code
         readonly BWIJAN20Context dbContext;
         public ItemService (BWIJAN20Context dbContext)
         {
