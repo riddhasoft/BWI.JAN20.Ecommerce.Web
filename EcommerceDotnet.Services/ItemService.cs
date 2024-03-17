@@ -48,6 +48,8 @@ namespace EcommerceDotnet.Services
 			if (item != null)
 			{
 				item.IsPublished = hideShow;
+				dbContext.Items.Update(item);
+				dbContext.SaveChangesAsync();
 				return true;
 			}
 			else
@@ -68,6 +70,7 @@ namespace EcommerceDotnet.Services
 					return false;
 				}
 				item.DisplayInHomePage = hideShow;
+				dbContext.Items.Update(item);
 				dbContext.SaveChanges();
 				return true;
 			}

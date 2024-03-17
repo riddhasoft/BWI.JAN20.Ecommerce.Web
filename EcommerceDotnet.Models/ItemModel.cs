@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace EcommerceDotnet.Models
 		public string Name { get; set; }
 		[MaxLength(10)]
 		public float Price { get; set; }
-		[MaxLength(10)]
+		[MaxLength(10),Column(TypeName="Decimal(18,2)")]//range
 		public float Discount { get; set; }
 		public string ImageURL { get; set; }
 		public bool IsDiscountPct { get; set; }
