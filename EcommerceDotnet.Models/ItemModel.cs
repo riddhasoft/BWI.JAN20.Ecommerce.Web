@@ -14,7 +14,7 @@ namespace EcommerceDotnet.Models
 		public int Id { get; set; }
 		[StringLength(100)]
 		public string Name { get; set; }
-		[MaxLength(10)]
+		[Column(TypeName = "Decimal(18,2)")]
 		public float Price { get; set; }
 		[MaxLength(10),Column(TypeName="Decimal(18,2)")]//range
 		public float Discount { get; set; }
