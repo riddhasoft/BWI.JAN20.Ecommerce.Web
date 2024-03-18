@@ -8,10 +8,10 @@ namespace EcommerceDotnet.Services
 {
     public interface IAccountService
     {
-        List<UserModel> List();
-        int Add(UserModel user);
-        int Update(UserModel user);
-        int Delete(int id);
-        UserModel Find(int id);
+        Task<List<UserModel>> List();
+        Task<int> Add(UserModel user);
+        Task<int> Update(UserModel user);
+        Task<int> Delete(int id);
+        Task<UserModel> Find(int id);
     }
 }
