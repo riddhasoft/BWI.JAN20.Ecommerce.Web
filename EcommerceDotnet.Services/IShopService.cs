@@ -9,7 +9,9 @@ namespace EcommerceDotnet.Services
 {
 	public interface IShopService
 	{
-		List<ItemModel> ListItemsInShop();
-
+			List<ItemModel> ListItemsInShop();
+			void ListAddToCart(ItemModel item);
+			void ListRemoveCart(int itemId);
+			void ListCheckout(List<int> itemIds);
 	}
 }
