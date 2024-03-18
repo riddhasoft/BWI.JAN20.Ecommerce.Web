@@ -12,6 +12,10 @@ namespace EcommerceDotnet.Web.Controllers
 		{
 			_context = context;
 		}
+		public IActionResult Index()
+		{
+			return View();
+		}
 		// GET: Shop/AddItem
 		public IActionResult Create()
 		{
