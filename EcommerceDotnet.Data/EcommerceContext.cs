@@ -16,5 +16,6 @@ namespace EcommerceDotnet.Data
 		}
 
 		public DbSet<ItemModel> Items { get; set; } = default!;
+		public DbSet<CheckOutModel> CheckoutItems { get; set; } = default!;
 	}
 }

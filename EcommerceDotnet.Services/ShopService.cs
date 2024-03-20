@@ -17,30 +17,31 @@ namespace EcommerceDotnet.Services
 		}
 
 		public List<ItemModel> ListItemsInShop()
-		{
+		{//is published=ture
 			return dbContext.Items.ToList();
 		}
 
-		public void ListAddToCart(ItemModel item)
+		public void AddToCart(CheckOutModel items)
 		{
-			dbContext.Items.Add(item);
+			dbContext.CheckoutItems.Add(items);
 			dbContext.SaveChanges();
 		}
 
-		public void ListRemoveCart(int itemId)
+		public void RemoveFromCart(int itemId)
 		{
-			var itemToRemove = dbContext.Items.FirstOrDefault(item => item.Id == itemId);
+			var itemToRemove = dbContext.CheckoutItems.FirstOrDefault(item => item.Id == itemId);
 			if (itemToRemove != null)
 			{
-				dbContext.Items.Remove(itemToRemove);
+				dbContext.CheckoutItems.Remove(itemToRemove);
 				dbContext.SaveChanges();
 			}
 		}
 
-		public void ListCheckout(List<int> itemIds)
+
+		public void Checkout(List<CheckOutModel> itemIds)
 		{
-			var itemsToRemove = dbContext.Items.Where(item => itemIds.Contains(item.Id)).ToList();
-			dbContext.Items.RemoveRange(itemsToRemove);
+			var itemscheckout=dbContext.CheckoutItems.Where(item=>item.Id==item.Id).ToList();
+			dbContext.CheckoutItems.RemoveRange(itemscheckout); 
 			dbContext.SaveChanges();
 		}
 	}
