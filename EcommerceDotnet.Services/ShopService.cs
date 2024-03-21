@@ -20,8 +20,11 @@ namespace EcommerceDotnet.Services
 		{//is published=ture
 			return dbContext.Items.ToList();
 		}
-
-		public void AddToCart(CheckOutModel items)
+        public ItemModel ListItemInShop(int id)
+        {
+            return dbContext.Items.Find(id);
+        }
+        public void AddToCart(CheckOutModel items)
 		{
 			dbContext.CheckoutItems.Add(items);
 			dbContext.SaveChanges();
@@ -44,5 +47,7 @@ namespace EcommerceDotnet.Services
 			dbContext.CheckoutItems.RemoveRange(itemscheckout); 
 			dbContext.SaveChanges();
 		}
-	}
+
+     
+    }
 }
