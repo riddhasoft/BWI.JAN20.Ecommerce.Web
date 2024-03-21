@@ -29,7 +29,7 @@ namespace EcommerceDotnet.Web.Controllers
 			if (ModelState.IsValid)
 			{
 				_itemService.AddItem(itemModel);
-				return RedirectToAction(nameof(Index));
+				 return RedirectToAction(nameof(Index));
 			}
 			return View(itemModel);
 		}
