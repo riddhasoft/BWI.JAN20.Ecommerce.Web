@@ -1,7 +1,6 @@
-﻿using EcommerceDotnet.Data;
-using EcommerceDotnet.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using EcommerceDotnet.Models;
+using EcommerceDotnet.Services;
+using IHostingEnvironmentMvc = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,81 +8,96 @@ namespace EcommerceDotnet.Web.Controllers
 {
 	public class ItemController : Controller
 	{
-		private readonly EcommerceContext _context;
+		readonly IItemService _itemService;
+        private readonly IHostingEnvironmentMvc _hostingEnvironment;
 
-		public ItemController(EcommerceContext context)
+
+        public ItemController(IItemService itemService, IHostingEnvironmentMvc hostingEnvironment)
 		{
-			_context = context;
+			_itemService = itemService;
+			_hostingEnvironment = hostingEnvironment;
 		}
-
-		// GET: ItemModel
-		public async Task<IActionResult> Index()
+		public IActionResult Index()
 		{
-			return _context.Items != null ?
-						View(await _context.Items.ToListAsync()) :
-						Problem("Entity set 'EcommerceContext.Items'  is null.");
-		}
-
-		// GET: Item/Details
-		public async Task<IActionResult> Details(int? id)
-		{
-			if (id == null || _context.Items == null)
-			{
-				return NotFound();
-			}
-
-			var itemModel = await _context.Items
-				.FirstOrDefaultAsync(m => m.Id == id);
-			if (itemModel == null)
-			{
-				return NotFound();
-			}
-
-			return View(itemModel);
-		}
-		[Authorize(Roles = "admin")]
-		// GET: Item/Create
+            List<ItemModel> items = _itemService.GetItems();
+            return View(items);
+        }
+		// GET: Item/AddItem
 		public IActionResult Create()
 		{
 			return View();
 		}
-
-		// POST: Item/Create
-
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Id,Name,Price,Discount,DiscountPct")] ItemModel itemModel)
+		//POST: Item/Create
+		[HttpPost, ActionName("Create")]
+		public async Task<IActionResult> AddItem([Bind("Id,Name,Price,Discount,IsDiscountPct,IsPublished,DisplayInHomePage")] ItemModel itemModel, IFormFile ImageFile)
 		{
-			if (ModelState.IsValid)
+            string uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+            if (!Directory.Exists(uploads))
+            {
+                Directory.CreateDirectory(uploads);
+            }
+            string filePath = Path.Combine(uploads, ImageFile.FileName);
+            using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                ImageFile.CopyTo(fileStream);
+                itemModel.ImageURL = "/uploads/" + ImageFile.FileName;
+            }
+
+
+
+            if (ModelState.IsValid)
 			{
-				_context.Add(itemModel);
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index));
+				_itemService.AddItem(itemModel);
+				 return RedirectToAction(nameof(Index));
 			}
 			return View(itemModel);
 		}
-		[Authorize(Roles = "admin")]
-		// GET: Item/Edit
-		public async Task<IActionResult> Edit(int? id)
+		// GET: Item/Delete
+		public async Task<IActionResult> Delete(int? id)
 		{
-			if (id == null || _context.Items == null)
+			if (id == null)
 			{
 				return NotFound();
 			}
 
-			var ItemModel = await _context.Items.FindAsync(id);
-			if (ItemModel == null)
+			var bookModel = _itemService.GetItem(id ?? 0);
+			if (bookModel == null)
 			{
 				return NotFound();
 			}
-			return View(ItemModel);
+
+			return View(bookModel);
 		}
 
-		// POST: Item/Edit
-		
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Discount,DiscountPct")] ItemModel itemModel)
+		// POST: Item/Delete
+		[HttpPost, ActionName("Delete")]
+		public async Task<IActionResult> DeleteConfirmed(int id)
+		{
+
+			_itemService.DeleteItem(id);
+			return RedirectToAction(nameof(Index));
+		}	
+
+        // GET: Item/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var itemModel = _itemService.GetItem(id??0);
+            if (itemModel == null)
+            {
+                return NotFound();
+            }
+            return View(itemModel);
+        }
+
+        //Post/Edit
+
+        [HttpPost, ActionName("Edit")]
+		public async Task<IActionResult> UpdateItem(int id, [Bind("Id,Name,Price,Discount,ImageURL,IsDiscountPct,IsPublished,DisplayInHomePage")] ItemModel itemModel)
 		{
 			if (id != itemModel.Id)
 			{
@@ -94,65 +108,22 @@ namespace EcommerceDotnet.Web.Controllers
 			{
 				try
 				{
-					_context.Update(itemModel);
-					await _context.SaveChangesAsync();
+					_itemService.UpdateItem(itemModel);
 				}
-				catch (DbUpdateConcurrencyException)
+				catch (Exception ex)
 				{
-					if (!StudentModelExists(itemModel.Id))
-					{
-						return NotFound();
-					}
-					else
-					{
-						throw;
-					}
+					Console.WriteLine($"Error occurred while updating item {ex.Message}");
 				}
 				return RedirectToAction(nameof(Index));
 			}
 			return View(itemModel);
 		}
-		[Authorize(Roles = "admin")]
-		// GET: Item/Delete
-		public async Task<IActionResult> Delete(int? id)
+		// GET: Shop/GetItem
+		public async Task<IActionResult> Details(int? id)
 		{
-			if (id == null || _context.Items == null)
-			{
-				return NotFound();
-			}
+			var item = _itemService.GetItem(id ?? 0);
 
-			var studentModel = await _context.Items
-				.FirstOrDefaultAsync(m => m.Id == id);
-			if (studentModel == null)
-			{
-				return NotFound();
-			}
-
-			return View(studentModel);
-		}
-
-		// POST: Item/Delete
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			if (_context.Items == null)
-			{
-				return Problem("Entity set 'BWIJAN20WEBContext.StudentModel'  is null.");
-			}
-			var studentModel = await _context.Items.FindAsync(id);
-			if (studentModel != null)
-			{
-				_context.Items.Remove(studentModel);
-			}
-
-			await _context.SaveChangesAsync();
-			return RedirectToAction(nameof(Index));
-		}
-
-		private bool StudentModelExists(int id)
-		{
-			return (_context.Items?.Any(e => e.Id == id)).GetValueOrDefault();
-		}
+			return View(item);
+		}	
 	}
 }

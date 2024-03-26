@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace EcommerceDotnet.Services
 {
-	public interface IShopService
-	{
-			List<ItemModel> ListItemsInShop();
-			ItemModel ListItemInShop(int id);
-
-			void AddToCart(CheckOutModel item);
-			void RemoveFromCart(int itemId);
-			void Checkout(List<CheckOutModel> itemIds);
-	}
+    public interface IShopService
+    {
+        List<ItemModel> ListItemsInShop();
+        ItemModel ListItemInShop(int id);
+        ItemModel GetItem(int id);
+        List<ItemModel> AddToCart(int itemid);
+        List<ItemModel> RemoveFromCart(int itemId);
+        void Checkout(List<CheckOutModel> itemIds);
+    }
 }

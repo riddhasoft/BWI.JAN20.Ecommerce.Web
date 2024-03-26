@@ -12,22 +12,22 @@ namespace EcommerceDotnet.Models
 	{
 		[Key]
 		public int Id { get; set; }
-		[Required,StringLength(60)]
+		[StringLength(60)]
 		public string Country { get; set; }
-		[Required, StringLength(60)]
+		[StringLength(60)]
 		public string FirstName { get; set; }
-		[Required, StringLength(60)]
+		[StringLength(60)]
 		public string LastName { get; set; }
 		[StringLength(60)]
 		public string? CompanyName { get; set; }
-		[Required]
+		
 		public string Address { get; set; }
 		[EmailAddress]
 		public string Email { get; set; }
 		[StringLength(60)]
 		public string Phone { get; set; }
 		public string? Notes {  get; set; }
-		[Column(TypeName ="Decimal(20,5")]
+		[Column(TypeName ="Decimal(20,5)")]
 		public float Amount { get; set; }
 
 	}

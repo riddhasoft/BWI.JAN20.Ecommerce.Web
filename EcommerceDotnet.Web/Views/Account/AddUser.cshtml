@@ -1,0 +1,19 @@
+﻿@model UserModel
+
+<h1>Create User</h1>
+
+<form asp-action="AddUser">
+    <div class="form-group">
+        <label asp-for="Username"></label>
+        <input asp-for="Username" class="form-control" />
+        <span asp-validation-for="Username"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <button type="submit">Create User</button>
+</form>
+<a asp-action="Index">Back to List</a>
+

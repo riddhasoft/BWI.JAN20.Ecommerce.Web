@@ -14,11 +14,11 @@ namespace EcommerceDotnet.Models
 		public int Id { get; set; }
 		[StringLength(100)]
 		public string Name { get; set; }
-		[Column(TypeName = "Decimal(18,2)")]
-		public float Price { get; set; }
-		[MaxLength(10),Column(TypeName="Decimal(18,2)")]//range
-		public float Discount { get; set; }
-		public string ImageURL { get; set; }
+		//[Column(TypeName = "Decimal(18,2)")]
+		public decimal Price { get; set; }
+		//[Column(TypeName="Decimal(18,2)")]//range
+		public decimal Discount { get; set; }
+		public string? ImageURL { get; set; }
 		public bool IsDiscountPct { get; set; }
 		public bool IsPublished { get; set; }
 		public bool DisplayInHomePage { get; set; }

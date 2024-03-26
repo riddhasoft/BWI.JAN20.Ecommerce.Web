@@ -34,7 +34,7 @@ namespace EcommerceDotnet.Services
 		}
 		public List<ItemModel> GetItems()
 		{
-			return dbContext.Items.ToList();
+		return dbContext.Items.ToList();
 		}
 		public int UpdateItem(ItemModel item)
 		{
@@ -48,6 +48,7 @@ namespace EcommerceDotnet.Services
 			if (item != null)
 			{
 				item.IsPublished = hideShow;
+				dbContext.Items.Where(x => x.IsPublished).ToList();
 				dbContext.Items.Update(item);
 				dbContext.SaveChangesAsync();
 				return true;
